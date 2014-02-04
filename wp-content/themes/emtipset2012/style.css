@@ -1,0 +1,71 @@
+/*
+Theme Name: EM-tipset 2012
+Theme URI: 
+Description: Ett egenhändigt anpassat tema för just den här sidan.
+Version: 1.0
+Author: Per-Erik Eriksson
+Author URI:
+*/
+
+html {font-size:100.01%;}
+body {font-size:75%;font-family:"Helvetica Neue", Arial, Helvetica, sans-serif; padding:0; margin:0;}
+.container {margin: 0 auto; width: 1000px;}
+
+#top {background: url(images/bg_top.png) top left repeat-x; height: 50px;}
+#top .container {position: relative;}
+#top #logo {
+   float: left;
+   width: 262px;
+   height: 63px;
+   margin: 0px 0px -12px 0px;
+   padding: 0px;
+   cursor: pointer;
+   position: relative;
+   z-index: 3;
+   background: url(images/logo.png ) no-repeat 0px 0px;
+}
+
+#main-menu {float:right; margin: 10px 20px 0 0}
+#main-menu ul {list-style-type: none;}
+#main-menu ul li {float: left;}
+#main-menu ul li a {color: #fff; text-decoration: none; margin: 0 0 0 20px; font-size: 120%; font-weight: bold;}
+
+/* SIDHUVUD */
+#sub-menu-container {height: 12px;}
+#sub-menu-container:after {content:"."; display: block; visibility: hidden; height: 0; clear: both; }
+#sub-menu {list-style-type: none; padding: 5px;margin: 0 30px 0 0;float:right;}
+#sub-menu li {float: left;}
+#sub-menu li a {color: #fff; text-decoration: none; font-size: 110%; font-weight: bold; margin: 0 10px;}
+
+#head {background: url(images/bg_head.png) top left repeat-x;}
+#head .container {}
+
+/* LITET HUVUD */
+#small-header {height: 100px; position:relative;padding-top:1px;}
+#small-header h1 {position:absolute; left: 20px; top: 10px; color: #fff; font: bold 26px Arial, Verdana, sans-serif; text-shadow: 1px 1px 1px #000;}
+
+/* STARTSIDA HUVUD */
+#start-header {padding-top: 1px;}
+#start-header:after {content:"."; display: block; visibility: hidden; height: 0; clear: both; }
+
+div#homeintro {margin: 0; padding: 0;}
+
+div#homeintroleft {float: left;width: 500px;margin: 0;padding: 0px;}
+div#homeintrolefttext {width: 450px;height: 240px;margin: 0px;padding: 30px 20px 0 20px;}
+div#homeintroleft h1 {position: relative;color: #fff;font: bold 26px Arial, Verdana, sans-serif;text-shadow: 1px 1px 1px #000;}
+div#homeintroleft p {color: #fff;text-shadow: 0.5px 0.5px 0.5px #000;font-size: 150%;}
+div#homeintro-buttons {margin: 0; padding: 0 0 0 20px;; list-style-type: none;}
+
+div#homeintroright {float: right; width: 476px; height: 357px; margin: 0; background: url(images/startrightbg.png ) no-repeat 0px 0px;}
+
+/* HUVUDINNEÅLL */
+#main .container {}
+#main .content-wrapper {margin:0;padding: 0 20px;}
+
+p {font-size: 120%;}
+
+div.float-fix {float:none; clear:both;}
+
+/*KOLUMNER */
+#main-left {float:left;width:650px;}
+#main-right {float:right;width:350px;}

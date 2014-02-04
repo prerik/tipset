@@ -1,0 +1,13 @@
+/*
+Theme Name:     zBench för EM-tipset
+Theme URI:      
+Description:    
+Author:         Per-Erik
+Author URI:     
+Template:       zbench
+Version:        0.1.0
+*/
+
+@import url("../zbench/style.css");
+
+.post img.avatar{position:absolute;right:0;top:0;width:40px;height:40px;background:#fff;padding:2px;border:1px solid #ddd;}
