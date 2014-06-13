@@ -60,7 +60,7 @@ FROM wp_tips_matches as matches
 LEFT JOIN wp_tips_teams AS home_team ON matches.home_team=home_team.id
 LEFT JOIN wp_tips_teams AS away_team ON matches.away_team=away_team.id
 LEFT JOIN wp_tips_tips as tips ON matches.id=tips.matches_id AND tips.users_id = '" . $user . "'
-LEFT JOIN wp_tips_results as results ON matches.id=results.matches_id AND results.users_id = '" . $user . "'";
+LEFT JOIN wp_tips_results as results ON matches.id=results.matches_id AND results.users_id = '" . $user . "' ORDER BY matches.id";
     $tips = $wpdb->get_results($querystring, OBJECT_K);
     $result = "<h2>Tipsrad för: " . $user_info->user_firstname . " " . $user_info->user_lastname . "</h2>";
     $result .= "<form id=\"tips-form\" method=\"post\" action=\"\">";
@@ -167,7 +167,7 @@ function results_func($atts) {
         $querystring = "SELECT results.users_id as userid, CONCAT(first_name.meta_value, ' ', last_name.meta_value) AS namn, SUM(results.points) AS poang " .
                 "FROM wp_tips_results AS results " .
                 "LEFT JOIN wp_usermeta AS first_name ON results.users_id=first_name.user_id AND first_name.meta_key='first_name' " .
-                "LEFT JOIN wp_usermeta AS last_name ON results.users_id=last_name.user_id AND last_name.meta_key='last_name' WHERE results.users_id NOT IN (1,15,30,52) " .
+                "LEFT JOIN wp_usermeta AS last_name ON results.users_id=last_name.user_id AND last_name.meta_key='last_name' WHERE results.users_id NOT IN (1,15,30,52,21,19,40,8,23,16,41,54,24,36,31,37,47,38,20,32) " .
                 "GROUP BY results.users_id ORDER BY poang DESC, namn ASC";
         $results = $wpdb->get_results($querystring, OBJECT_K);
         $result = "<table>";
@@ -207,7 +207,7 @@ function matches_func($atts) {
         $querystring = "SELECT wp_users.`ID` as user_id, firstname.meta_value as first_name, lastname.meta_value as last_name, tips.`goals_home_team` as goals_home, tips.`goals_away_team` as goals_away, tips.`sign` as sign FROM wp_users ".
 "LEFT JOIN wp_tips_tips AS tips ON wp_users.id=tips.users_id AND tips.matches_id=". $_GET['matchid'].
 " LEFT JOIN wp_usermeta AS lastname ON wp_users.id=lastname.user_id AND lastname.`meta_key`='last_name' ".
-"LEFT JOIN wp_usermeta AS firstname ON wp_users.id=firstname.user_id AND firstname.`meta_key`='first_name' WHERE wp_users.`ID` NOT IN (1,15,30,52)".
+"LEFT JOIN wp_usermeta AS firstname ON wp_users.id=firstname.user_id AND firstname.`meta_key`='first_name' WHERE wp_users.`ID` NOT IN (1,15,30,52,21,19,40,8,23,16,41,54,24,36,31,37,47,38,20,32)".
 "ORDER BY lastname.meta_value";
         $tips = $wpdb->get_results($querystring, OBJECT_K);
         $result .= "<table>";
@@ -241,7 +241,7 @@ function matches_func($atts) {
         }
         $querystring = "SELECT matches.id, home_team.name as home_team, away_team.name as away_team, matches.start_time, matches.result_home_team, matches.result_away_team FROM wp_tips_matches as matches " .
                 "LEFT JOIN wp_tips_teams as home_team ON matches.home_team=home_team.id " .
-                "LEFT JOIN wp_tips_teams as away_team ON matches.away_team=away_team.id";
+                "LEFT JOIN wp_tips_teams as away_team ON matches.away_team=away_team.id ORDER BY matches.id";
         $matches = $wpdb->get_results($querystring, OBJECT_K);
         setlocale('LC_ALL', 'sv_SE.UTF-8');
         if (current_user_can('manage_options')) {
@@ -366,11 +366,11 @@ function tipset_install() {
 
     $matches_sql = "CREATE TABLE " . $matches_table_name . " (
 	  id int NOT NULL AUTO_INCREMENT,
-	  home_team int DEFAULT 0 NOT NULL,
-	  away_team int DEFAULT 0 NOT NULL,
-	  result_home_team int DEFAULT 0 NOT NULL,
-	  result_away_team int DEFAULT 0 NOT NULL,
-	  start_time datetime NOT NULL,
+	  home_team varchar(10) DEFAULT '' NOT NULL,
+	  away_team varchar(10) DEFAULT '' NOT NULL,
+	  result_home_team int,
+	  result_away_team int,
+	  start_time datetime,
 	  UNIQUE KEY id (id)
 	);";
 
