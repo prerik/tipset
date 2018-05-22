@@ -1,1 +1,97 @@
-jQuery(document).ready(function(b){var a=b("#timestamp").html();b(".edit-timestamp").click(function(){if(b("#timestampdiv").is(":hidden")){b("#timestampdiv").slideDown("normal");b(".edit-timestamp").hide()}return false});b(".cancel-timestamp").click(function(){b("#timestampdiv").slideUp("normal");b("#mm").val(b("#hidden_mm").val());b("#jj").val(b("#hidden_jj").val());b("#aa").val(b("#hidden_aa").val());b("#hh").val(b("#hidden_hh").val());b("#mn").val(b("#hidden_mn").val());b("#timestamp").html(a);b(".edit-timestamp").show();return false});b(".save-timestamp").click(function(){var g=b("#aa").val(),h=b("#mm").val(),d=b("#jj").val(),c=b("#hh").val(),f=b("#mn").val(),e=new Date(g,h-1,d,c,f);if(e.getFullYear()!=g||(1+e.getMonth())!=h||e.getDate()!=d||e.getMinutes()!=f){b(".timestamp-wrap","#timestampdiv").addClass("form-invalid");return false}else{b(".timestamp-wrap","#timestampdiv").removeClass("form-invalid")}b("#timestampdiv").slideUp("normal");b(".edit-timestamp").show();b("#timestamp").html(commentL10n.submittedOn+" <b>"+b('#mm option[value="'+h+'"]').text()+" "+d+", "+g+" @ "+c+":"+f+"</b> ");return false})});
+/* global postboxes, commentL10n */
+
+/**
+ * @summary Binds to the document ready event.
+ *
+ * @since 2.5.0
+ *
+ * @param {jQuery} $ The jQuery object.
+ */
+jQuery(document).ready( function($) {
+
+	postboxes.add_postbox_toggles('comment');
+
+	var $timestampdiv = $('#timestampdiv'),
+		$timestamp = $( '#timestamp' ),
+		stamp = $timestamp.html(),
+		$timestampwrap = $timestampdiv.find( '.timestamp-wrap' ),
+		$edittimestamp = $timestampdiv.siblings( 'a.edit-timestamp' );
+
+	/**
+	 * @summary Adds event that opens the time stamp form if the form is hidden.
+	 *
+	 * @listens $edittimestamp:click
+	 *
+	 * @param {Event} event The event object.
+	 * @returns {void}
+	 */
+	$edittimestamp.click( function( event ) {
+		if ( $timestampdiv.is( ':hidden' ) ) {
+			// Slide down the form and set focus on the first field.
+			$timestampdiv.slideDown( 'fast', function() {
+				$( 'input, select', $timestampwrap ).first().focus();
+			} );
+			$(this).hide();
+		}
+		event.preventDefault();
+	});
+
+	/**
+	 * @summary Resets the time stamp values when the cancel button is clicked.
+	 *
+	 * @listens .cancel-timestamp:click
+	 *
+	 * @param {Event} event The event object.
+	 * @returns {void}
+	 */
+
+	$timestampdiv.find('.cancel-timestamp').click( function( event ) {
+		// Move focus back to the Edit link.
+		$edittimestamp.show().focus();
+		$timestampdiv.slideUp( 'fast' );
+		$('#mm').val($('#hidden_mm').val());
+		$('#jj').val($('#hidden_jj').val());
+		$('#aa').val($('#hidden_aa').val());
+		$('#hh').val($('#hidden_hh').val());
+		$('#mn').val($('#hidden_mn').val());
+		$timestamp.html( stamp );
+		event.preventDefault();
+	});
+
+	/**
+	 * @summary Sets the time stamp values when the ok button is clicked.
+	 *
+	 * @listens .save-timestamp:click
+	 *
+	 * @param {Event} event The event object.
+	 * @returns {void}
+	 */
+	$timestampdiv.find('.save-timestamp').click( function( event ) { // crazyhorse - multiple ok cancels
+		var aa = $('#aa').val(), mm = $('#mm').val(), jj = $('#jj').val(), hh = $('#hh').val(), mn = $('#mn').val(),
+			newD = new Date( aa, mm - 1, jj, hh, mn );
+
+		event.preventDefault();
+
+		if ( newD.getFullYear() != aa || (1 + newD.getMonth()) != mm || newD.getDate() != jj || newD.getMinutes() != mn ) {
+			$timestampwrap.addClass( 'form-invalid' );
+			return;
+		} else {
+			$timestampwrap.removeClass( 'form-invalid' );
+		}
+
+		$timestamp.html(
+			commentL10n.submittedOn + ' <b>' +
+			commentL10n.dateFormat
+				.replace( '%1$s', $( 'option[value="' + mm + '"]', '#mm' ).attr( 'data-text' ) )
+				.replace( '%2$s', parseInt( jj, 10 ) )
+				.replace( '%3$s', aa )
+				.replace( '%4$s', ( '00' + hh ).slice( -2 ) )
+				.replace( '%5$s', ( '00' + mn ).slice( -2 ) ) +
+				'</b> '
+		);
+
+		// Move focus back to the Edit link.
+		$edittimestamp.show().focus();
+		$timestampdiv.slideUp( 'fast' );
+	});
+});
