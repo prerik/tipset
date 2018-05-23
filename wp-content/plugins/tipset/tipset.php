@@ -71,8 +71,10 @@ LEFT JOIN wp_tips_results as results ON matches.id=results.matches_id AND result
     $result .= "<th>Bortalag</th>";
     $result .= "<th colspan=\"3\">Resultat</th>";
     $result .= "<th>Tecken</th>";
-    $result .= "<th colspan=\"3\">Slutresultat</th>";
-    $result .= "<th>Poäng</th>";
+    if ($options['tipset_open'] == off) {
+        $result .= "<th colspan=\"3\">Slutresultat</th>";
+        $result .= "<th>Poäng</th>";
+    }
     $result .= "</tr>";
     foreach ($tips as $t) {
         $result .= "<tr>";
@@ -90,10 +92,12 @@ LEFT JOIN wp_tips_results as results ON matches.id=results.matches_id AND result
             $result .= "<td>" . $t->goals_away_team . "</td>";
             $result .= "<td>" . $t->sign . "</td>";
         }
-        $result .= "<td>" . $t->result_home_team . "</td>";
-        $result .= "<td>-</td>";
-        $result .= "<td>" . $t->result_away_team . "</td>";
-        $result .= "<td>" . $t->points . "</td>";
+        if ($options['tipset_open'] == off) {
+            $result .= "<td>" . $t->result_home_team . "</td>";
+            $result .= "<td>-</td>";
+            $result .= "<td>" . $t->result_away_team . "</td>";
+            $result .= "<td>" . $t->points . "</td>";
+        }
         $result .= "</tr>";
     }
     $result .= "</table>";
