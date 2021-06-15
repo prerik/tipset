@@ -171,8 +171,9 @@ function results_func($atts) {
         $querystring = "SELECT results.users_id as userid, CONCAT(first_name.meta_value, ' ', last_name.meta_value) AS namn, SUM(results.points) AS poang " .
                 "FROM wp_tips_results AS results " .
                 "LEFT JOIN wp_usermeta AS first_name ON results.users_id=first_name.user_id AND first_name.meta_key='first_name' " .
-                "LEFT JOIN wp_usermeta AS last_name ON results.users_id=last_name.user_id AND last_name.meta_key='last_name' WHERE results.users_id NOT IN (1,15,30,52,21,19,40,8,23,16,41,54,24,36,31,37,47,38,20,32) " .
-                "GROUP BY results.users_id ORDER BY poang DESC, namn ASC";
+                "LEFT JOIN wp_usermeta AS last_name ON results.users_id=last_name.user_id AND last_name.meta_key='last_name' " .
+				"WHERE results.users_id IN (SELECT DISTINCT users_id FROM wp_tips_tips) ".
+          		"GROUP BY results.users_id ORDER BY poang DESC, namn ASC";
         $results = $wpdb->get_results($querystring, OBJECT_K);
         $result = "<table>";
         $result .= "<tr>";
@@ -211,7 +212,8 @@ function matches_func($atts) {
         $querystring = "SELECT wp_users.`ID` as user_id, firstname.meta_value as first_name, lastname.meta_value as last_name, tips.`goals_home_team` as goals_home, tips.`goals_away_team` as goals_away, tips.`sign` as sign FROM wp_users ".
 "LEFT JOIN wp_tips_tips AS tips ON wp_users.id=tips.users_id AND tips.matches_id=". $_GET['matchid'].
 " LEFT JOIN wp_usermeta AS lastname ON wp_users.id=lastname.user_id AND lastname.`meta_key`='last_name' ".
-"LEFT JOIN wp_usermeta AS firstname ON wp_users.id=firstname.user_id AND firstname.`meta_key`='first_name' WHERE wp_users.`ID` NOT IN (1,15,30,52,21,19,40,8,23,16,41,54,24,36,31,37,47,38,20,32)".
+"LEFT JOIN wp_usermeta AS firstname ON wp_users.id=firstname.user_id AND firstname.`meta_key`='first_name' ".
+"WHERE wp_users.`ID` IN (SELECT DISTINCT users_id FROM wp_tips_tips) ".
 "ORDER BY lastname.meta_value";
         $tips = $wpdb->get_results($querystring, OBJECT_K);
         $result .= "<table>";
@@ -345,9 +347,9 @@ function calculatePoints($resultH, $resultA, $tipH, $tipA, $tipS) {
     if ($resultH == $tipH &&
             $resultA == $tipA) {
         if (intval($resultH) + intval($resultA) > 2) {
-            $points = $points + 4;
+            $points = $points + 3;
         } else {
-            $points = $points + 2;
+            $points = $points + 3;
         }
     }
     if (intval($resultH) > intval($resultA)) {
@@ -458,3 +460,5 @@ function updateTips($userId) {
 //    }
 //}
 ?>
+
+

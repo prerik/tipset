@@ -48,7 +48,7 @@ class BottomListWidget extends WP_Widget {
                 "FROM wp_tips_results AS results " .
                 "LEFT JOIN wp_usermeta AS first_name ON results.users_id=first_name.user_id AND first_name.meta_key='first_name' " .
                 "LEFT JOIN wp_usermeta AS last_name ON results.users_id=last_name.user_id AND last_name.meta_key='last_name' " .
-                "WHERE results.users_id NOT IN (1,15,30,52) ".
+				"WHERE results.users_id IN (SELECT DISTINCT users_id FROM wp_tips_tips) ".
                 "GROUP BY results.users_id ORDER BY poang ASC, last_name.meta_value ASC LIMIT 5";
         $results = $wpdb->get_results($querystring, OBJECT_K);
         $result = "<ul>";
@@ -69,3 +69,5 @@ class BottomListWidget extends WP_Widget {
 
 }
 ?>
+
+
